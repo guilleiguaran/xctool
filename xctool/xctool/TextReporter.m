@@ -663,6 +663,22 @@
   }
 }
 
+- (void)analyzerResult:(NSDictionary *)event
+{
+  [self.reportWriter printLine:@"%@:%@:%@: %@",
+   event[kReporter_AnalyzerResult_FileKey],
+   event[kReporter_AnalyzerResult_LineKey],
+   event[kReporter_AnalyzerResult_ColumnKey],
+   event[kReporter_AnalyzerResult_DescriptionKey]];
+  [self.reportWriter increaseIndent];
+  for (NSDictionary *piece in event[kReporter_AnalyzerResult_ContextKey]) {
+    [self.reportWriter printLine:@"%@:%@:%@: %@",
+     piece[@"file"], piece[@"line"], piece[@"col"], piece[@"message"]];
+  }
+  [self.reportWriter decreaseIndent];
+  [self.reportWriter printNewline];
+}
+
 @end
 
 @implementation PrettyTextReporter
